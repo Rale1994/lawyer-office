@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<table class="table table-striped">
+
+    <tr>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>City</th>
+        <th>Address</th>
+        <th>Phone number</th>
+        <th>Email address</th>
+        <th>Edit</th>
+        <th>Delete</th>
+
+    </tr>
+    {% for client in clients %}
+    <tr>
+        <td>{{client.first_name}}</td>
+        <td>{{client.last_name}}</td>
+        <td>{{client.city}}</td>
+        <td>{{client.address}}</td>
+        <td>{{client.phone}}</td>
+        <td>{{client.mail}}</td>
+        <td><a href="{{ url_for('client.edit', client_id=client.id) }}">Edit</a></td>
+        <td><a href="{{ url_for('client.delete', client_id= client.id) }}">Delete</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock content %}
+
