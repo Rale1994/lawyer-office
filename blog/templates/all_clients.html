@@ -1,7 +1,19 @@
 {% extends 'base.html' %}
 {% block content %}
-<table class="table table-striped">
+<br>
+<form action="{{url_for('client.search')}}" method="POST">
+    <div class="input-group">
+        <div class="form-outline">
+            <input type="search" name="search_string" id="form1" class="form-control"/>
+        </div>
+        <button type="submit" value="Search" class="btn btn-primary">
+            <i class="fas fa-search"></i> Search
+        </button>
+    </div>
+</form>
+<br>
 
+<table class="table table-striped">
     <tr>
         <th>First name</th>
         <th>Last name</th>
@@ -13,7 +25,9 @@
         <th>Delete</th>
 
     </tr>
+
     {% for client in clients %}
+
     <tr>
         <td>{{client.first_name}}</td>
         <td>{{client.last_name}}</td>
@@ -25,6 +39,8 @@
         <td><a href="{{ url_for('client.delete', client_id= client.id) }}">Delete</a></td>
     </tr>
     {% endfor %}
+
 </table>
+
 {% endblock content %}
 

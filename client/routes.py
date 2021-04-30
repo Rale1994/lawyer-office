@@ -31,7 +31,22 @@ def add_client():
 @client.route("/all_client")
 def all_client():
     clients = Client.query.filter_by(lawyer=current_user)
-    return render_template("all_clients.html", title="All client", clients=clients)
+    return render_template("all_clients.html", title="All clients", clients=clients)
+
+
+@client.route("/search", methods=['POST'])
+@login_required
+def search():
+    if request.method == 'POST':
+        form = request.form
+        search_value = form['search_string']
+        search = "{0}".format(search_value)
+        results = Client.query.filter(Client.first_name.like(search)).filter(Client.user_id == current_user.id).all()
+        for res in results:
+            print(res.last_name)
+        return render_template("all_clients.html", title="All clients", clients=results)
+    else:
+        return redirect(url_for("client.all_client"))
 
 
 @client.route("/edit/<int:client_id>", methods=['GET', 'POST'])
