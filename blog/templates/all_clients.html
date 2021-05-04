@@ -2,16 +2,21 @@
 {% block content %}
 <br>
 <form action="{{url_for('client.search')}}" method="POST">
-    <div class="input-group">
-        <div class="form-outline">
-            <input type="search" name="search_string" id="form1" class="form-control"/>
+    <div class="form-group">
+        <div class="input-group input-group-lg">
+
+            <div class="form-outline">
+                <input type="search" size="50px" placeholder="Search client by first name" name="search_string" id="form1"
+                       class="form-control form-control-lg"/>
+            </div>
+            <button type="submit"  value="Search" class="btn btn-primary">
+                <i class="fas fa-search"></i> Search
+            </button>
         </div>
-        <button type="submit" value="Search" class="btn btn-primary">
-            <i class="fas fa-search"></i> Search
-        </button>
     </div>
 </form>
 <br>
+<a href="{{url_for('client.all_client')}}">Reset search</a>
 
 <table class="table table-striped">
     <tr>

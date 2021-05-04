@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<form method="POST">
+    {{ form.csrf_token }}
+    <label for="#">Choose client: </label>
+    {{ form.client_name }}
+</form>
+
+{% endblock content %}

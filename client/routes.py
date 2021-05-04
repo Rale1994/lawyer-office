@@ -3,6 +3,7 @@ from blog import db
 from flask_login import login_required, current_user
 from client.forms import AddClient
 from blog.models import Client
+from judgment.forms import AddJudgments
 
 client = Blueprint("client", __name__)
 
@@ -63,7 +64,7 @@ def edit(client_id):
 
         print(form.address.data)
         db.session.commit()
-        return redirect(url_for('users.all_client'))
+        return redirect(url_for('client.all_client'))
 
     elif request.method == 'GET':
         form.f_name.data = client.first_name
@@ -82,3 +83,24 @@ def delete(client_id):
     db.session.commit()
     flash(f"Client has been deleted!", "success")
     return redirect(url_for('client.all_client'))
+
+
+@client.route("/add_judgments")
+def add_judgments():
+    form = AddJudgments()
+    lista = get_client_for_combo()
+    form.client_name.choices = lista
+    return render_template("add_judgments.html", form=form)
+
+
+
+def get_client_for_combo():
+    fname_and_lname = [(client.first_name, client.last_name) for client in
+                       Client.query.filter_by(lawyer=current_user).all()]
+    result = map(join_tuple_string, fname_and_lname)
+    lista = list(result)
+    return lista
+
+
+def join_tuple_string(strings_tuple) -> str:
+    return ' '.join(strings_tuple)

@@ -7,6 +7,12 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
+Judgments = db.Table('judgments',
+                     db.Column("user_id", db.Integer, db.ForeignKey('user.id'), nullable=False),
+                     db.Column("client_id", db.Integer, db.ForeignKey('client.id'), nullable=False)
+                     )
+
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True, nullable=False)
@@ -14,6 +20,8 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(100), nullable=False)
     clients = db.relationship('Client', backref='lawyer', lazy='dynamic',
                               primaryjoin="(User.id==foreign(Client.user_id))")
+
+    judgments = db.relationship('Client', secondary=Judgments, backref="client")
 
 
 class Client(db.Model):
@@ -24,4 +32,9 @@ class Client(db.Model):
     address = db.Column(db.String(50), nullable=False)
     phone = db.Column(db.String(50), nullable=False)
     mail = db.Column(db.String(50))
+
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    judgments = db.relationship("User", secondary=Judgments, backref="client")
+
+db.create_all()
