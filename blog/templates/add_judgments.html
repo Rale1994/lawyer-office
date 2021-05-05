@@ -2,8 +2,26 @@
 {% block content %}
 <form method="POST">
     {{ form.csrf_token }}
-    <label for="#">Choose client: </label>
+    <br>
+    <label for="client">Choose client: </label>
     {{ form.client_name }}
+
+    <div class="mb-3">
+        <br>
+        <label for="exampleFormControlInput1" class="form-label">Title</label>
+        <input type="title" class="form-control" size="50px" name="title" id="exampleFormControlInput1" placeholder="Title">
+    </div>
+    <div class="mb-3">
+        <label for="exampleFormControlTextarea1" class="form-label">Text</label>
+        <textarea class="form-control" name="content" id="exampleFormControlTextarea1" rows="3"></textarea>
+    </div>
+    <div>
+        {{form.date.label(class="form-control-label")}}
+        <br>
+        {{ form.date}}
+    </div>
+    <br>
+     <button type="submit" class="btn btn-primary">Add judgment</button>
 </form>
 
 {% endblock content %}
