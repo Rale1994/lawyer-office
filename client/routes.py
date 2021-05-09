@@ -2,8 +2,9 @@ from flask import Blueprint, render_template, redirect, request, url_for, flash
 from blog import db
 from flask_login import login_required, current_user
 from client.forms import AddClient
-from blog.models import Client
+from blog.models import Client, Judgment
 from judgment.forms import AddJudgments
+from sqlalchemy import or_
 
 client = Blueprint("client", __name__)
 
@@ -42,7 +43,8 @@ def search():
         form = request.form
         search_value = form['search_string']
         search = "{0}".format(search_value)
-        results = Client.query.filter(Client.first_name.like(search)).filter(Client.user_id == current_user.id).all()
+        results = Client.query.filter(or_(Client.first_name.like(search), Client.last_name.like(search))).filter(
+            Client.user_id == current_user.id).all()
         for res in results:
             print(res.last_name)
         return render_template("all_clients.html", title="All clients", clients=results)
@@ -85,13 +87,17 @@ def delete(client_id):
     return redirect(url_for('client.all_client'))
 
 
-@client.route("/add_judgments")
-def add_judgments():
+@client.route("/add_judgments/<int:client_id>", methods=['POST', 'GET'])
+def add_judgments(client_id):
+    client_judgment = Client.query.get_or_404(client_id)
     form = AddJudgments()
-    lista = get_client_for_combo()
-    form.client_name.choices = lista
-    return render_template("add_judgments.html", form=form)
-
+    if form.validate_on_submit():
+        judgment = Judgment(title=form.title.data, content=form.content.data, date=form.date.data)
+        client_judgment.judgment.append(judgment)
+        db.session.commit()
+        flash('Judgment has added', 'success')
+        return redirect(url_for('client.all_client'))
+    return render_template("add_judgments.html", title="Add judgment", form=form, client=client)
 
 
 def get_client_for_combo():

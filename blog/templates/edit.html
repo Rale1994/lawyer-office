@@ -1,13 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
+<h1>Editing client</h1>
+<br>
 
-{% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for msg in messages %}
-                <p>{{msg}}</p>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
 <form action="" method="POST">
     {{ form.csrf_token }}
 

@@ -1,27 +1,42 @@
 {% extends 'base.html' %}
 {% block content %}
-<form method="POST">
-    {{ form.csrf_token }}
-    <br>
-    <label for="client">Choose client: </label>
-    {{ form.client_name }}
+<h1>Adding judgment</h1>
+<br>
+{% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+                <p>{{msg}}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+<form action="" method="POST">
+    {{ form.csrf_token() }}
 
-    <div class="mb-3">
-        <br>
-        <label for="exampleFormControlInput1" class="form-label">Title</label>
-        <input type="title" class="form-control" size="50px" name="title" id="exampleFormControlInput1" placeholder="Title">
-    </div>
-    <div class="mb-3">
-        <label for="exampleFormControlTextarea1" class="form-label">Text</label>
-        <textarea class="form-control" name="content" id="exampleFormControlTextarea1" rows="3"></textarea>
-    </div>
-    <div>
-        {{form.date.label(class="form-control-label")}}
-        <br>
-        {{ form.date}}
-    </div>
-    <br>
-     <button type="submit" class="btn btn-primary">Add judgment</button>
+
+    <div class="form-group">
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="title">Title</label>
+                <input type="title" class="form-control" id="title" name="title" placeholder="Title">
+            </div>
+        </div>
+        <div class="form-group purple-border">
+            <label for="content">Content</label>
+            <textarea class="form-control" id="content" name="content" rows="3"></textarea>
+        </div>
+
+            <div class="form-group">
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="date">Date</label>
+                        <input type="date" class="form-control" id="date" name="date" placeholder="date">
+                    </div>
+                </div>
+                <br>
+
+                <button type="submit" class="btn btn-primary">Add judgment</button>
 </form>
 
 {% endblock content %}

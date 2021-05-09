@@ -1,12 +1,19 @@
 {% extends 'base.html' %}
 {% block content %}
 <br>
+{% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+                <p>{{msg}}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 <form action="{{url_for('client.search')}}" method="POST">
     <div class="form-group">
         <div class="input-group input-group-lg">
 
             <div class="form-outline">
-                <input type="search" size="50px" placeholder="Search client by first name" name="search_string" id="form1"
+                <input type="search" size="50px" placeholder="Search client by first name or last name" name="search_string" id="form1"
                        class="form-control form-control-lg"/>
             </div>
             <button type="submit"  value="Search" class="btn btn-primary">
@@ -28,6 +35,7 @@
         <th>Email address</th>
         <th>Edit</th>
         <th>Delete</th>
+        <th>Judgment</th>
 
     </tr>
 
@@ -42,6 +50,7 @@
         <td>{{client.mail}}</td>
         <td><a href="{{ url_for('client.edit', client_id=client.id) }}">Edit</a></td>
         <td><a href="{{ url_for('client.delete', client_id= client.id) }}">Delete</a></td>
+        <td><a href="{{ url_for('client.add_judgments', client_id= client.id) }}">Add judgment</a></td>
     </tr>
     {% endfor %}
 
