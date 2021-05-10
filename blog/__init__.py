@@ -25,3 +25,7 @@ app.register_blueprint(main)
 from client.routes import client
 
 app.register_blueprint(client)
+
+from errors.handlers import errors
+
+app.register_blueprint(errors)
