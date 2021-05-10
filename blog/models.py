@@ -28,6 +28,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(100), unique=True, nullable=False)
     name = db.Column(db.String(200), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
+    image_file = db.Column(db.String(20), nullable=False, default='profile_pics.jpg')
     clients = db.relationship('Client', backref='lawyer', lazy='dynamic',
                               primaryjoin="(User.id==foreign(Client.user_id))", overlaps="judgment, user")
 
@@ -50,4 +51,4 @@ class Client(db.Model):
     judgment = db.relationship('Judgment', secondary=Judgments, backref='judgment', lazy="dynamic")
 
 
-db.create_all()
+# db.create_all()

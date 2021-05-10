@@ -1,9 +1,10 @@
 from flask import render_template, Blueprint, redirect, url_for, flash, request
 from flask_login import login_user, current_user, logout_user, login_required, LoginManager
-from users.forms import RegistrationForm, LoginForm
+from users.forms import RegistrationForm, LoginForm, UpdateAccount
 from blog import app, db, bcrypt, login_manager
 from werkzeug.security import generate_password_hash
 from blog.models import User
+from users.helper import save_picture
 
 users = Blueprint("users", __name__)
 
@@ -24,7 +25,7 @@ def registration():
 
         db.session.add(new_user)
         db.session.commit()
-        return redirect(url_for('main.home'))
+        return redirect(url_for('users.login'))
 
     return render_template("registration.html", form=form, title="Registration form")
 
@@ -46,6 +47,29 @@ def login():
             return redirect(url_for('users.login'))
 
     return render_template('login.html', form=form, title="Log in")
+
+
+@users.route("/account", methods=['GET', 'POST'])
+@login_required
+def account():
+    form = UpdateAccount()
+    if form.validate_on_submit():
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+            current_user.image_file = picture_file
+
+        current_user.name = form.name.data
+        current_user.email = form.email.data
+        db.session.commit()
+        flash('Your account has been updated!', 'success')
+        return redirect(url_for('users.account'))
+
+    elif request.method == 'GET':
+        form.name.data = current_user.name
+        form.email.data = current_user.email
+
+    image_file = url_for('static', filename='img/' + current_user.image_file)
+    return render_template("account.html", title="My account", form=form, image_file=image_file)
 
 
 @users.route("/logout")
