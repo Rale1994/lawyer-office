@@ -38,13 +38,14 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <a class="dropdown-item" href="{{ url_for('client.add_client') }}">Add client</a>
                     <a class="dropdown-item" href="{{ url_for('client.all_client') }}">View my client</a>
+                    <a class="dropdown-item" href="{{ url_for('client.responsibilities') }}">My daily responsibilities</a>
 
 
                 </div>
             </li>
             </li>
             <li class="nav-item">
-               <a class="nav-link" href="{{url_for('users.account')}}">My Account</a>
+                <a class="nav-link" href="{{url_for('users.account')}}">My Account</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{url_for('users.logout')}}">Logout</a>

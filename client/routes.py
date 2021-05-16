@@ -2,9 +2,10 @@ from flask import Blueprint, render_template, redirect, request, url_for, flash
 from blog import db
 from flask_login import login_required, current_user
 from client.forms import AddClient
-from blog.models import Client, Judgment
+from blog.models import Client, Judgment, Judgments
 from judgment.forms import AddJudgments
 from sqlalchemy import or_
+from datetime import datetime, date, timedelta
 
 client = Blueprint("client", __name__)
 
@@ -98,6 +99,22 @@ def add_judgments(client_id):
         flash('Judgment has added', 'success')
         return redirect(url_for('client.all_client'))
     return render_template("add_judgments.html", title="Add judgment", form=form, client=client)
+
+
+@client.route("/responsibilities")
+def responsibilities():
+    start_day = datetime.today().date()
+    end_day = datetime.today().date() + timedelta(days=1)
+    judgments = Judgment.query.filter(Judgment.date.between(start_day, end_day))
+
+    for judgment in judgments:
+        clients = Client.query.join(Judgment.judgment).filter(Judgment.id == judgment.id).all()
+        print(clients)
+
+        return render_template("responsibilities.html", clients=clients, judgments=judgments,
+                               title="My daily responsibilities")
+
+    return render_template("responsibilities.html", title="My daily responsibilities")
 
 
 def get_client_for_combo():

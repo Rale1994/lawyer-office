@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>My daily responsibilities</h1>
+<br>
+<table class="table table-striped">
+    <tr>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Judgment titl</th>
+        <th>judgment date</th>
+
+
+    </tr>
+{% for judgment in judgments %}
+    {% for client in clients %}
+
+    <tr>
+        <td>{{client.first_name}}</td>
+        <td>{{client.last_name}}</td>
+        <td>{{judgment.title}}</td>
+        <td>{{judgment.date}}</td>
+
+    </tr>
+    {% endfor %}
+{% endfor %}
+</table>
+
+{% endblock content %}

@@ -10,8 +10,9 @@ def load_user(user_id):
 
 
 Judgments = db.Table('judgments',
-                     db.Column("judgment_id", db.Integer, db.ForeignKey('judgment.id'), nullable=False),
-                     db.Column("client_id", db.Integer, db.ForeignKey('client.id'), nullable=False),
+                     db.Column("judgment_id", db.Integer, db.ForeignKey('judgment.id'), primary_key=True,
+                               nullable=False),
+                     db.Column("client_id", db.Integer, db.ForeignKey('client.id'), primary_key=True, nullable=False),
                      )
 
 
@@ -49,6 +50,5 @@ class Client(db.Model):
     # judgments = db.relationship("User", secondary=Judgments, backref="client")
 
     judgment = db.relationship('Judgment', secondary=Judgments, backref='judgment', lazy="dynamic")
-
 
 # db.create_all()
