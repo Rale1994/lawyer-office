@@ -9,10 +9,10 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-Judgments = db.Table('judgments',
-                     db.Column("judgment_id", db.Integer, db.ForeignKey('judgment.id'), primary_key=True,
+judgments = db.Table('judgments',
+                     db.Column("judgment_id", db.Integer, db.ForeignKey('judgment.id'),
                                nullable=False),
-                     db.Column("client_id", db.Integer, db.ForeignKey('client.id'), primary_key=True, nullable=False),
+                     db.Column("client_id", db.Integer, db.ForeignKey('client.id'), nullable=False),
                      )
 
 
@@ -22,7 +22,7 @@ class Judgment(db.Model):
     title = db.Column(db.String(250), nullable=False)
     content = db.Column(db.Text, nullable=False)
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-
+    client_id=db.Column(db.Integer, db.ForeignKey('client.id'))
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -33,8 +33,6 @@ class User(db.Model, UserMixin):
     clients = db.relationship('Client', backref='lawyer', lazy='dynamic',
                               primaryjoin="(User.id==foreign(Client.user_id))", overlaps="judgment, user")
 
-    # judgments = db.relationship('Client', secondary=Judgments, backref="client")
-    # judgment = db.relationship('Judgment', secondary=Judgments, backref='user', lazy="select",overlaps="clients, user")
 
 
 class Client(db.Model):
@@ -47,8 +45,9 @@ class Client(db.Model):
     mail = db.Column(db.String(50))
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    # judgments = db.relationship("User", secondary=Judgments, backref="client")
+    judgments = db.relationship('Judgment', backref='judgments')
 
-    judgment = db.relationship('Judgment', secondary=Judgments, backref='judgment', lazy="dynamic")
+    # client_judgments = db.relationship('Judgment', secondary=judgments, backref='judgments', lazy="dynamic")
 
-# db.create_all()
+
+db.create_all()

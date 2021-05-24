@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, request, url_for, flash
 from blog import db
 from flask_login import login_required, current_user
 from client.forms import AddClient
-from blog.models import Client, Judgment, Judgments
+from blog.models import Client, Judgment, judgments
 from judgment.forms import AddJudgments
 from sqlalchemy import or_
 from datetime import datetime, date, timedelta
@@ -90,31 +90,29 @@ def delete(client_id):
 
 @client.route("/add_judgments/<int:client_id>", methods=['POST', 'GET'])
 def add_judgments(client_id):
-    client_judgment = Client.query.get_or_404(client_id)
+    client_jdg = Client.query.get_or_404(client_id)
     form = AddJudgments()
     if form.validate_on_submit():
-        judgment = Judgment(title=form.title.data, content=form.content.data, date=form.date.data)
-        client_judgment.judgment.append(judgment)
+        judgment = Judgment(title=form.title.data, content=form.content.data, date=form.date.data,
+                            client_id=client_jdg.id)
+        db.session.add(judgment)
         db.session.commit()
         flash('Judgment has added', 'success')
         return redirect(url_for('client.all_client'))
     return render_template("add_judgments.html", title="Add judgment", form=form, client=client)
 
 
-@client.route("/responsibilities")
+@client.route("/responsibilities", methods=['GET'])
 def responsibilities():
     start_day = datetime.today().date()
     end_day = datetime.today().date() + timedelta(days=1)
-    judgments = Judgment.query.filter(Judgment.date.between(start_day, end_day))
-
+    judgments = Judgment.query.filter(Judgment.date.between(start_day, end_day)).all()
     for judgment in judgments:
-        clients = Client.query.join(Judgment.judgment).filter(Judgment.id == judgment.id).all()
-        print(clients)
-
-        return render_template("responsibilities.html", clients=clients, judgments=judgments,
-                               title="My daily responsibilities")
-
-    return render_template("responsibilities.html", title="My daily responsibilities")
+        clients = Client.query.filter(Client.id == judgment.client_id).all()
+        for cl in clients:
+            print(cl.first_name, cl.last_name)
+    return render_template("responsibilities.html", judgments=judgments, clients_list=clients,
+                           title="Responsibities")
 
 
 def get_client_for_combo():

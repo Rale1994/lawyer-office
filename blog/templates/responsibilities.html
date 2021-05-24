@@ -4,25 +4,29 @@
 <br>
 <table class="table table-striped">
     <tr>
-        <th>First name</th>
-        <th>Last name</th>
-        <th>Judgment titl</th>
-        <th>judgment date</th>
+        <th>Client</th>
+        <th>Judgment title</th>
+        <th>Judgment date</th>
+        <th>id client</th>
 
 
     </tr>
-{% for judgment in judgments %}
-    {% for client in clients %}
-
+    {% for judgment in judgments %}
     <tr>
-        <td>{{client.first_name}}</td>
-        <td>{{client.last_name}}</td>
+        {% for client in clients_list %}
+        <td>{{client.first_name}} {{client.last_name}}</td>
         <td>{{judgment.title}}</td>
         <td>{{judgment.date}}</td>
-
+        <td>{{judgment.client_id}}</td>
     </tr>
-    {% endfor %}
-{% endfor %}
+
+    {%endfor%}
+    {%endfor%}
 </table>
 
+<br>
+<br>
+{% for client in clients_list %}
+<p>{{client.first_name}} {{client.last_name}}</p>
+{%endfor%}
 {% endblock content %}
