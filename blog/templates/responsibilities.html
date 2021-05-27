@@ -7,26 +7,20 @@
         <th>Client</th>
         <th>Judgment title</th>
         <th>Judgment date</th>
-        <th>id client</th>
 
 
     </tr>
     {% for judgment in judgments %}
     <tr>
-        {% for client in clients_list %}
-        <td>{{client.first_name}} {{client.last_name}}</td>
-        <td>{{judgment.title}}</td>
-        <td>{{judgment.date}}</td>
-        <td>{{judgment.client_id}}</td>
-    </tr>
+        {% for clients in clients_list[judgment.id] %}
 
-    {%endfor%}
+            <td>{{clients.first_name}} {{clients.last_name}}</td>
+            <td>{{judgment.title}}</td>
+            <td>{{judgment.date}}</td>
+
+        {%endfor%}
+    </tr>
     {%endfor%}
 </table>
 
-<br>
-<br>
-{% for client in clients_list %}
-<p>{{client.first_name}} {{client.last_name}}</p>
-{%endfor%}
 {% endblock content %}
