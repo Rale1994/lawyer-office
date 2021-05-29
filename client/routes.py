@@ -104,17 +104,19 @@ def add_judgments(client_id):
 
 @client.route("/responsibilities", methods=['GET'])
 def responsibilities():
-    start_day = datetime.today().date() + timedelta(days=3)
-    end_day = datetime.today().date() + timedelta(days=4)
+    start_day = datetime.today().date()
+    end_day = datetime.today().date() + timedelta(days=1)
     judgments = Judgment.query.filter(Judgment.date.between(start_day, end_day)).all()
 
+    if not judgments:
+        return render_template("responsibilities.html", title="Responsibilities")
     all_clients = {
 
     }
     for judgment in judgments:
         all_clients[judgment.id] = Client.query.filter(Client.id == judgment.client_id).all()
     return render_template("responsibilities.html", judgments=judgments, clients_list=all_clients,
-                           title="Responsibities")
+                           title="Responsibilities")
 
 
 def get_client_for_combo():
