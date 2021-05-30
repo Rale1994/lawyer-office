@@ -3,12 +3,12 @@
 <h1>Adding judgment</h1>
 <br>
 {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for msg in messages %}
-                <p>{{msg}}</p>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+{% if messages %}
+{% for msg in messages %}
+<p>{{msg}}</p>
+{% endfor %}
+{% endif %}
+{% endwith %}
 <form action="" method="POST">
     {{ form.csrf_token() }}
 
@@ -26,17 +26,16 @@
             <textarea class="form-control" id="content" name="content" rows="3"></textarea>
         </div>
 
-            <div class="form-group">
+        <div class="form-group">
 
-                <div class="form-row">
-                    <div class="form-group col-md-4">
-                        <label for="date">Date</label>
-                        <input type="date" class="form-control" id="date" name="date" placeholder="date">
-                    </div>
-                </div>
-                <br>
+            <label for="Judgment date">Date:</label>
 
-                <button type="submit" class="btn btn-primary">Add judgment</button>
+            <input type="datetime-local" id="Judgment date"
+                   name="meeting-time">
+
+            <button type="submit" class="btn btn-primary">Add judgment</button>
+        </div>
+    </div>
 </form>
 
 {% endblock content %}

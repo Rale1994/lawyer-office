@@ -1,6 +1,7 @@
 from datetime import datetime
 from blog import db, login_manager
 from flask_login import UserMixin
+from sqlalchemy.sql import func
 
 
 @login_manager.user_loader
@@ -20,8 +21,9 @@ class Judgment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(250), nullable=False)
     content = db.Column(db.Text, nullable=False)
-    date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    client_id=db.Column(db.Integer, db.ForeignKey('client.id'))
+    date = db.Column(db.DateTime(timezone=True), default=datetime.utcnow)
+    client_id = db.Column(db.Integer, db.ForeignKey('client.id'))
+
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -31,7 +33,6 @@ class User(db.Model, UserMixin):
     image_file = db.Column(db.String(20), nullable=False, default='profile_pics.jpg')
     clients = db.relationship('Client', backref='lawyer', lazy='dynamic',
                               primaryjoin="(User.id==foreign(Client.user_id))", overlaps="judgment, user")
-
 
 
 class Client(db.Model):

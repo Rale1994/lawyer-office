@@ -7,6 +7,7 @@
         <th>Client</th>
         <th>Judgment title</th>
         <th>Judgment date</th>
+        <th>Judgment time</th>
 
 
     </tr>
@@ -14,9 +15,10 @@
     <tr>
         {% for clients in clients_list[judgment.id] %}
 
-            <td>{{clients.first_name}} {{clients.last_name}}</td>
-            <td>{{judgment.title}}</td>
-            <td>{{judgment.date}}</td>
+        <td>{{clients.first_name}} {{clients.last_name}}</td>
+        <td>{{judgment.title}}</td>
+        <td>{{judgment.date.strftime("%b %d")}} </td>
+        <td>{{judgment.date.strftime("%H : %M")}}</td>
 
         {%endfor%}
     </tr>
