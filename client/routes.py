@@ -93,7 +93,11 @@ def add_judgments(client_id):
     client_jdg = Client.query.get_or_404(client_id)
     form = AddJudgments()
     if form.validate_on_submit():
-        judgment = Judgment(title=form.title.data, content=form.content.data, date=form.date.data,
+        judgment_date = form.date_of_judgment.data
+        date_obj = datetime.strptime(judgment_date, '%d.%m.%Y %H:%M')
+        judgment = Judgment(title=form.title.data,
+                            content=form.content.data,
+                            date_of_judgment=date_obj,
                             client_id=client_jdg.id)
         db.session.add(judgment)
         db.session.commit()
@@ -106,7 +110,7 @@ def add_judgments(client_id):
 def responsibilities():
     start_day = datetime.today().date()
     end_day = datetime.today().date() + timedelta(days=1)
-    judgments = Judgment.query.filter(Judgment.date.between(start_day, end_day)).all()
+    judgments = Judgment.query.filter(Judgment.date_of_judgment.between(start_day, end_day)).all()
 
     if not judgments:
         return render_template("responsibilities.html", title="Responsibilities")

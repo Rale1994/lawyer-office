@@ -17,8 +17,8 @@
 
         <td>{{clients.first_name}} {{clients.last_name}}</td>
         <td>{{judgment.title}}</td>
-        <td>{{judgment.date.strftime("%b %d")}} </td>
-        <td>{{judgment.date.strftime("%H : %M")}}</td>
+        <td>{{judgment.date_of_judgment.strftime("%b %d")}} </td>
+        <td>{{judgment.date_of_judgment.strftime("%H : %M")}}</td>
 
         {%endfor%}
     </tr>
