@@ -9,7 +9,7 @@
 {% endfor %}
 {% endif %}
 {% endwith %}
-<form action="" method="POST">
+<form method="POST" action="" enctype="multipart/form-data">
     {{ form.csrf_token() }}
 
 
@@ -27,12 +27,20 @@
         </div>
 
         <div class="form-group">
-            <label >Date of judgment:</label>
-
+            <label>Date of judgment:</label>
             <input type="text" id="date_of_judgment" name="date_of_judgment">
-
-            <button type="submit" class="btn btn-primary">Add judgment</button>
         </div>
+        <div class="container">
+            <h1>Document input</h1>
+            <div class="form-group">
+                <label>Document input</label>
+                <input type="file" name="inputFile">
+            </div>
+        </div>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+
     </div>
 </form>
 

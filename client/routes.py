@@ -1,11 +1,13 @@
-from flask import Blueprint, render_template, redirect, request, url_for, flash
-from blog import db
+import os
+
+from flask import Blueprint, render_template, redirect, request, url_for, flash, current_app
+from blog import db, app
 from flask_login import login_required, current_user
 from client.forms import AddClient
-from blog.models import Client, Judgment, judgments
+from blog.models import Client, Judgment
 from judgment.forms import AddJudgments
 from sqlalchemy import or_
-from datetime import datetime, date, timedelta
+from datetime import datetime, timedelta
 
 client = Blueprint("client", __name__)
 
@@ -93,11 +95,17 @@ def add_judgments(client_id):
     client_jdg = Client.query.get_or_404(client_id)
     form = AddJudgments()
     if form.validate_on_submit():
+        if request.files:
+            file = request.files['inputFile']
+            file.save(
+                os.path.join('C:/Users/Korisnik/Desktop/Python/rados-project/blog/static/documents', file.filename))
         judgment_date = form.date_of_judgment.data
         date_obj = datetime.strptime(judgment_date, '%d.%m.%Y %H:%M')
+        print(type(file.filename))
         judgment = Judgment(title=form.title.data,
                             content=form.content.data,
                             date_of_judgment=date_obj,
+                            document=file.filename,
                             client_id=client_jdg.id)
         db.session.add(judgment)
         db.session.commit()
@@ -121,6 +129,14 @@ def responsibilities():
         all_clients[judgment.id] = Client.query.filter(Client.id == judgment.client_id).all()
     return render_template("responsibilities.html", judgments=judgments, clients_list=all_clients,
                            title="Responsibilities")
+
+
+@client.route("/upload-document", methods=["GET", "POST"])
+def upload_document():
+    if request.method == 'POST':
+        if request.files:
+            document = request
+    return render_template("add_judgments.html")
 
 
 def get_client_for_combo():

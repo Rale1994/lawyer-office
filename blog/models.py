@@ -22,6 +22,7 @@ class Judgment(db.Model):
     title = db.Column(db.String(250), nullable=False)
     content = db.Column(db.Text, nullable=False)
     date_of_judgment = db.Column(db.DateTime, default=datetime.now)
+    document = db.Column(db.String(250), nullable=False)
     client_id = db.Column(db.Integer, db.ForeignKey('client.id'))
 
 
