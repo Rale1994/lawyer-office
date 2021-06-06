@@ -2,6 +2,11 @@
 {% block content %}
 <h1>My daily responsibilities</h1>
 <br>
+<a href="{{url_for('client.responsibilities_next_day')}}">For the next 7 days</a>
+<br>
+<a href="{{url_for('client.responsibilities')}}">Reset</a>
+<br>
+
 <table class="table table-striped">
     <tr>
         <th>Client</th>
@@ -17,7 +22,7 @@
 
         <td>{{clients.first_name}} {{clients.last_name}}</td>
         <td>{{judgment.title}}</td>
-        <td>{{judgment.date_of_judgment.strftime("%b %d")}} </td>
+        <td>{{judgment.date_of_judgment.strftime("%b %d")}}</td>
         <td>{{judgment.date_of_judgment.strftime("%H : %M")}}</td>
 
         {%endfor%}

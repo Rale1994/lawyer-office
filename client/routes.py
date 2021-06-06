@@ -105,7 +105,7 @@ def add_judgments(client_id):
         judgment = Judgment(title=form.title.data,
                             content=form.content.data,
                             date_of_judgment=date_obj,
-                            document=file.filename,
+                            document=file.read(),
                             client_id=client_jdg.id)
         db.session.add(judgment)
         db.session.commit()
@@ -118,7 +118,26 @@ def add_judgments(client_id):
 def responsibilities():
     start_day = datetime.today().date()
     end_day = datetime.today().date() + timedelta(days=1)
-    judgments = Judgment.query.filter(Judgment.date_of_judgment.between(start_day, end_day)).all()
+    judgments = Judgment.query.filter(Judgment.date_of_judgment.between(start_day, end_day)).order_by(
+        Judgment.date_of_judgment.asc()).all()
+
+    if not judgments:
+        return render_template("responsibilities.html", title="Responsibilities")
+    all_clients = {
+
+    }
+    for judgment in judgments:
+        all_clients[judgment.id] = Client.query.filter(Client.id == judgment.client_id).all()
+    return render_template("responsibilities.html", judgments=judgments, clients_list=all_clients,
+                           title="Responsibilities")
+
+
+@client.route("/responsibilities_next_day", methods=['GET'])
+def responsibilities_next_day():
+    start_day = datetime.today().date()+ timedelta(days=1)
+    end_day = datetime.today().date() + timedelta(days=8)
+    judgments = Judgment.query.filter(Judgment.date_of_judgment.between(start_day, end_day)).order_by(
+        Judgment.date_of_judgment.asc()).all()
 
     if not judgments:
         return render_template("responsibilities.html", title="Responsibilities")
