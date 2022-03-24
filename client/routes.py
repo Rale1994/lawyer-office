@@ -34,6 +34,7 @@ def add_client():
 
 
 @client.route("/all_client")
+@login_required
 def all_client():
     clients = Client.query.filter_by(lawyer=current_user)
     return render_template("all_clients.html", title="All clients", clients=clients)
@@ -56,6 +57,7 @@ def search():
 
 
 @client.route("/edit/<int:client_id>", methods=['GET', 'POST'])
+@login_required
 def edit(client_id):
     client = Client.query.get_or_404(client_id)
     form = AddClient()
@@ -82,6 +84,7 @@ def edit(client_id):
 
 
 @client.route("/delete/<int:client_id>", methods=['GET'])
+@login_required
 def delete(client_id):
     client = Client.query.get_or_404(client_id)
     db.session.delete(client)
@@ -91,6 +94,7 @@ def delete(client_id):
 
 
 @client.route("/add_judgments/<int:client_id>", methods=['POST', 'GET'])
+@login_required
 def add_judgments(client_id):
     client_jdg = Client.query.get_or_404(client_id)
     form = AddJudgments()
@@ -115,6 +119,7 @@ def add_judgments(client_id):
 
 
 @client.route("/responsibilities", methods=['GET'])
+@login_required
 def responsibilities():
     start_day = datetime.today().date()
     end_day = datetime.today().date() + timedelta(days=1)
@@ -133,6 +138,7 @@ def responsibilities():
 
 
 @client.route("/responsibilities_next_day", methods=['GET'])
+@login_required
 def responsibilities_next_day():
     start_day = datetime.today().date()+ timedelta(days=1)
     end_day = datetime.today().date() + timedelta(days=8)
@@ -150,12 +156,7 @@ def responsibilities_next_day():
                            title="Responsibilities")
 
 
-@client.route("/upload-document", methods=["GET", "POST"])
-def upload_document():
-    if request.method == 'POST':
-        if request.files:
-            document = request
-    return render_template("add_judgments.html")
+
 
 
 def get_client_for_combo():
